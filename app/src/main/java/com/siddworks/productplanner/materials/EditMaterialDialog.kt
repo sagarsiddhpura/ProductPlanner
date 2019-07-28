@@ -4,6 +4,7 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.siddworks.productplanner.BaseActivity
 import com.siddworks.productplanner.R
+import com.siddworks.productplanner.data.Material
 import com.siddworks.productplanner.extensions.setupDialogStuff
 import com.siddworks.productplanner.extensions.toast
 import kotlinx.android.synthetic.main.dialog_edit_material.view.*
@@ -35,7 +36,7 @@ class EditMaterialDialog(private val activity: BaseActivity, val material: Mater
     private fun sendSuccess(alertDialog: AlertDialog, view : View, material: Material) {
         material.name = view.edit_material_name.text.toString()
         material.unit = view.edit_material_unit.text.toString()
-        material.unitPrice = view.edit_material_unit_price.text.toString().toLong()
+        material.unitPrice = view.edit_material_unit_price.text.toString().toDouble()
 
         callback(material)
         alertDialog.dismiss()

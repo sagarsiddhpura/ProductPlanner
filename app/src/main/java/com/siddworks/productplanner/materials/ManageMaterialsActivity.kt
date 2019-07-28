@@ -1,12 +1,16 @@
 package com.siddworks.productplanner.materials
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.siddworks.productplanner.BaseActivity
 import com.siddworks.productplanner.R
+import com.siddworks.productplanner.data.Material
 import com.siddworks.productplanner.extensions.dataSource
 import com.siddworks.productplanner.extensions.toast
 import com.siddworks.productplanner.utils.addVerticalDividers
@@ -19,12 +23,13 @@ class ManageMaterialsActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(com.siddworks.productplanner.R.layout.activity_manage_materials)
+        setContentView(R.layout.activity_manage_materials)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Manage Materials"
 
         dataSource.getMaterials(this) {
             if(it != null) {
+                it.sortByDescending { it.id }
                 mats = it
                 // Creates a vertical Layout Manager
                 val layoutManager = materials_rv.layoutManager as GridLayoutManager
@@ -66,7 +71,7 @@ class ManageMaterialsActivity : BaseActivity() {
         if(highestId != null) {
             nextId = highestId.id.plus(1)
         }
-        val material = Material(nextId, "", "", 0)
+        val material = Material(nextId, "", "", 0.0)
         EditMaterialDialog(this, material) {
             mats.add(it)
             refreshMaterials(mats)
@@ -75,8 +80,48 @@ class ManageMaterialsActivity : BaseActivity() {
     }
 
     private fun refreshMaterials(materials: ArrayList<Material>) {
+        materials.sortByDescending { it.id }
         getRecyclerAdapter()?.updateEntities(materials)
     }
 
     private fun getRecyclerAdapter() = materials_rv.adapter as? ManageMaterialsAdapter
+
+    fun delete(material: Material) {
+        val builder = AlertDialog.Builder(this@ManageMaterialsActivity)
+        builder.setMessage("Are you sure you want to delete this Material?")
+            .setTitle("Delete Material?")
+        builder.setPositiveButton("YES") { dialog, itemId ->
+            val iterator = mats.iterator()
+            while (iterator.hasNext()) {
+                val currentItem = iterator.next()
+                if (currentItem.id == material.id) {
+                    iterator.remove()
+                    break
+                }
+            }
+            refreshMaterials(mats)
+            dataSource.removeMaterial(this, material)
+            Toast.makeText(applicationContext, "Material deleted...", Toast.LENGTH_LONG).show()
+        }
+        builder.setNegativeButton("CANCEL", null)
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+    fun edit(material: Material) {
+        EditMaterialDialog(this, material) {
+            val iterator = mats.iterator()
+            while (iterator.hasNext()) {
+                val currentItem = iterator.next()
+                if (currentItem.id == material.id) {
+                    iterator.remove()
+                    break
+                }
+            }
+
+            mats.add(material)
+            refreshMaterials(mats)
+            dataSource.updateMaterial(this, material)
+        }
+    }
 }

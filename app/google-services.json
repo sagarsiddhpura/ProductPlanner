@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "705419369229",
+    "firebase_url": "https://productplanner-a5c19.firebaseio.com",
+    "project_id": "productplanner-a5c19",
+    "storage_bucket": "productplanner-a5c19.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:705419369229:android:55101d64174a5125",
+        "android_client_info": {
+          "package_name": "com.siddworks.productplanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "705419369229-ubhm10r1aokk2n5v5vjuqc0jnbjj5bdr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.siddworks.productplanner",
+            "certificate_hash": "33c72d341e6811d596ef86892c62d1810fb6dc4a"
+          }
+        },
+        {
+          "client_id": "705419369229-pibp5ermscnts3dvuh0i10mk3k2iqvc9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-SlLRKm3XCqX-HZdZZ2J4bVR0r1Vsn_U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "705419369229-pibp5ermscnts3dvuh0i10mk3k2iqvc9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

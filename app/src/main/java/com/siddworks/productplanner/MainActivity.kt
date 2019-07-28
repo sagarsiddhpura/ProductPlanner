@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         if(BuildConfig.DEBUG) {
 //            config.firmId = "raghuvir"
-//            debugDataSource.initMockDataRealtimeDatabase(this, dataSource)
+            debugDataSource.initMockDataRealtimeDatabase(this, dataSource)
             Intent(this, ManageMaterialsActivity::class.java).apply {
                 startActivity(this)
             }
