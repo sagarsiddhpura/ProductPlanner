@@ -4,7 +4,6 @@ import android.app.Activity
 import com.google.firebase.database.*
 import com.siddworks.productplanner.BuildConfig
 import com.siddworks.productplanner.extensions.config
-import com.siddworks.productplanner.materials.ManageMaterialsActivity
 
 private var db: FirebaseDatabase? = null
 
@@ -21,6 +20,7 @@ private var purchaseLogDbVersion: String
 class DataSource {
 
     private var materials: ArrayList<Material>? = null
+    private var categories: ArrayList<Category>? = null
 
     fun getDatabase(): FirebaseDatabase {
         if (db == null) {
@@ -35,7 +35,7 @@ class DataSource {
         return getDatabase().getReference(activity.config.firmId+"/$matsDbVersion/materials")
     }
 
-    fun getMaterials(activity: Activity, callback: (cats: ArrayList<Material>?) -> Unit) {
+    fun getMaterials(activity: Activity, callback: (mats: ArrayList<Material>?) -> Unit) {
         if (materials != null) {
             callback(materials!!)
             return
@@ -79,13 +79,33 @@ class DataSource {
     }
 
     fun addMaterial(activity: Activity, material: Material) {
-        val catsDatabase = getMatsDatabase(activity)
-        catsDatabase.child(material.id.toString()).setValue(material)
+        val matsDatabase = getMatsDatabase(activity)
+        matsDatabase.child(material.id).setValue(material)
     }
 
     fun removeMaterial(activity: Activity, material: Material) {
-        val catsDatabase = getMatsDatabase(activity)
-        catsDatabase.child(material.id.toString()).removeValue()
+        val matsDatabase = getMatsDatabase(activity)
+        matsDatabase.child(material.id).removeValue()
+    }
+
+    fun updateMaterial(activity: Activity, material: Material) {
+        val matsDatabase = getMatsDatabase(activity)
+        matsDatabase.child(material.id).setValue(material)
+    }
+
+    fun addCategory(activity: Activity, category: Category) {
+        val catsDatabase = getCatsDatabase(activity)
+        catsDatabase.child(category.id).setValue(category)
+    }
+
+    fun removeCategory(activity: Activity, category: Category) {
+        val catsDatabase = getCatsDatabase(activity)
+        catsDatabase.child(category.id).removeValue()
+    }
+
+    fun updateCategory(activity: Activity, category: Category) {
+        val catsDatabase = getCatsDatabase(activity)
+        catsDatabase.child(category.id).setValue(category)
     }
 
     fun getCatsDatabase(activity: Activity): DatabaseReference {
@@ -96,9 +116,47 @@ class DataSource {
         return getDatabase().getReference(activity.config.firmId+"/$catsDbVersion/items")
     }
 
-    fun updateMaterial(activity: Activity, material: Material) {
-        val catsDatabase = getMatsDatabase(activity)
-        catsDatabase.child(material.id.toString()).setValue(material)
+    fun getCategories(activity: Activity, callback: (cats: ArrayList<Category>?) -> Unit) {
+        if (categories != null) {
+            callback(categories!!)
+            return
+        } else {
+            val database = getCatsDatabase(activity)
+            database.keepSynced(true)
+
+            database.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val genericTypeIndicator = object : GenericTypeIndicator<HashMap<String, Category>>() {}
+                    val currentItemsMap = snapshot.getValue(genericTypeIndicator)
+                    if (currentItemsMap != null) {
+                        var currentItems = currentItemsMap.values
+                        currentItems = currentItems.filter { it != null } as ArrayList<Category>
+                        categories = currentItems
+                        callback(categories)
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    println("The read failed: " + databaseError.code)
+                }
+            })
+
+            database.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val genericTypeIndicator = object : GenericTypeIndicator<HashMap<String, Category>>() {}
+                    val currentItemsMap = snapshot.getValue(genericTypeIndicator)
+                    if (currentItemsMap != null) {
+                        var currentItems = currentItemsMap.values
+                        currentItems = currentItems.filter { it != null } as ArrayList<Category>
+                        categories = currentItems as ArrayList<Category>
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    println("The read failed: " + (databaseError?.code ?: ""))
+                }
+            })
+        }
     }
 
 }

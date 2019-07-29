@@ -12,7 +12,7 @@ import com.siddworks.productplanner.extensions.config
 
 class DebugDataSource {
     fun initMockDataRealtimeDatabase(activity: Activity,  dataSource: DataSource) {
-        importMaterials(activity, dataSource)
+//        importMaterials(activity, dataSource)
         importCategories(activity, dataSource)
 //        importSwings(activity, dataSource)
 //        importSlides(activity, dataSource)

@@ -12,6 +12,7 @@ import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
+import com.siddworks.productplanner.data.categories.ManageCategoryActivity
 import com.siddworks.productplanner.extensions.config
 import com.siddworks.productplanner.extensions.dataSource
 import com.siddworks.productplanner.extensions.debugDataSource
@@ -39,7 +40,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if(BuildConfig.DEBUG) {
 //            config.firmId = "raghuvir"
             debugDataSource.initMockDataRealtimeDatabase(this, dataSource)
-            Intent(this, ManageMaterialsActivity::class.java).apply {
+//            Intent(this, ManageMaterialsActivity::class.java).apply {
+//                startActivity(this)
+//            }
+            Intent(this, ManageCategoryActivity::class.java).apply {
                 startActivity(this)
             }
             finish()
