@@ -29,7 +29,7 @@ class ManageMaterialsActivity : BaseActivity() {
 
         dataSource.getMaterials(this) {
             if(it != null) {
-                it.sortByDescending { it.id }
+                it.sortByDescending { it.order }
                 mats = it
                 // Creates a vertical Layout Manager
                 val layoutManager = materials_rv.layoutManager as GridLayoutManager
@@ -66,12 +66,12 @@ class ManageMaterialsActivity : BaseActivity() {
     }
 
     private fun addEntity() {
-        val highestId = mats.maxBy { it.id }
+        val highestId = mats.maxBy { it.order }
         var nextId = 1L
         if(highestId != null) {
-            nextId = highestId.id.plus(1)
+            nextId = highestId.order.plus(1)
         }
-        val material = Material(nextId, "", "", 0.0)
+        val material = Material("mat_" + nextId, "", "", 0.0, nextId)
         EditMaterialDialog(this, material) {
             mats.add(it)
             refreshMaterials(mats)
@@ -80,7 +80,7 @@ class ManageMaterialsActivity : BaseActivity() {
     }
 
     private fun refreshMaterials(materials: ArrayList<Material>) {
-        materials.sortByDescending { it.id }
+        materials.sortByDescending { it.order }
         getRecyclerAdapter()?.updateEntities(materials)
     }
 

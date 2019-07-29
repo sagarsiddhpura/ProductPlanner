@@ -13,7 +13,7 @@ import com.siddworks.productplanner.extensions.config
 class DebugDataSource {
     fun initMockDataRealtimeDatabase(activity: Activity,  dataSource: DataSource) {
         importMaterials(activity, dataSource)
-//        importCategories(activity, dataSource)
+        importCategories(activity, dataSource)
 //        importSwings(activity, dataSource)
 //        importSlides(activity, dataSource)
 //        importMerryGoRound(activity, dataSource)
@@ -160,7 +160,7 @@ class DebugDataSource {
         }
     }
 
-    private fun getMaterialIdFromName(materialName: String, newMaterials: ArrayList<Material>?): Long {
+    private fun getMaterialIdFromName(materialName: String, newMaterials: ArrayList<Material>?): String {
         return newMaterials?.find { it.name == materialName }?.id!!
     }
 
@@ -177,9 +177,10 @@ class DebugDataSource {
             "MultiPlaySystem")
         var count = 1L
         categories.forEach {
-            catsDatabase.child(count.toString()).setValue(
-                Category(count++, it)
+            catsDatabase.child("cat_" + count.toString()).setValue(
+                Category("cat_" + count, it, count)
             )
+            count++
         }
         catsDatabase.push()
     }
@@ -197,14 +198,16 @@ class DebugDataSource {
                     currentMats = currentMats.filter { it != null } as ArrayList<Old_Material>
                     var count = 1L
                     currentMats.forEach {
-                        matsDatabase.child("mat_"+count.toString()).setValue(
+                        matsDatabase.child("mat_" + count.toString()).setValue(
                             Material(
-                                count++,
+                                "mat_" + count,
                                 it.MaterialName,
                                 it.Unit,
-                                it.UnitPrice.toDouble()
+                                it.UnitPrice.toDouble(),
+                                count
                             )
                         )
+                        count++
                     }
                     dbRef.push()
                 }
