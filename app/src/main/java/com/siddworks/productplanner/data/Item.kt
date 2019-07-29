@@ -11,5 +11,10 @@ data class Item (
     var categoryId: Long = 0,
     var itemMaterials: ArrayList<ItemMaterial> = arrayListOf(),
     var priceModifiers: ArrayList<PriceModifier> = arrayListOf(),
-    var order: Int = 0
+    var order: Int = 0,
+    var images: ArrayList<String> = arrayListOf(),
+    var videos: ArrayList<String> = arrayListOf(),
+    var categories: ArrayList<String> = arrayListOf(),
+    var tags: String = "",
+    var idString: String = ""
 )

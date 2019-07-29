@@ -14,6 +14,7 @@ import com.siddworks.productplanner.extensions.dataSource
 import com.siddworks.productplanner.extensions.toast
 import com.siddworks.productplanner.materials.EditCategoryDialog
 import com.siddworks.productplanner.utils.addVerticalDividers
+import com.siddworks.productplanner.utils.setupSystemUI
 import kotlinx.android.synthetic.main.activity_manage_materials.*
 
 class ManageCategoryActivity : BaseActivity() {
@@ -23,8 +24,9 @@ class ManageCategoryActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_manage_materials)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Manage Categories"
+        setSupportActionBar(toolbar)
+        supportActionBar!!.title = "Manage Categories"
+        setupSystemUI(this)
 
         dataSource.getCategories(this) {
             if(it != null) {

@@ -14,6 +14,7 @@ import com.siddworks.productplanner.data.Material
 import com.siddworks.productplanner.extensions.dataSource
 import com.siddworks.productplanner.extensions.toast
 import com.siddworks.productplanner.utils.addVerticalDividers
+import com.siddworks.productplanner.utils.setupSystemUI
 import kotlinx.android.synthetic.main.activity_manage_materials.*
 
 
@@ -24,8 +25,9 @@ class ManageMaterialsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_manage_materials)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "Manage Materials"
+        setSupportActionBar(toolbar)
+        supportActionBar!!.title = "Manage Materials"
+        setupSystemUI(this)
 
         dataSource.getMaterials(this) {
             if(it != null) {
